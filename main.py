@@ -27,8 +27,8 @@ def serialize_csv(file_path: str, search_tag: str, anon_all: bool):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    file_path: str ="./sample.csv"
-    search_for: str = "PatientName"
+    file_path: str ="./sample2.csv"
+    search_for: str = "AccessionNumber"
     anon_tags: str = ""
     anon_all: bool = False
     serialize_csv(file_path, search_for, anon_all)
