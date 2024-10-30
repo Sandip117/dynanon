@@ -1,0 +1,3 @@
+PatientName,PatientID,AccessionNumber,RequestingPhysician
+"%_name|patientID_PatientName",4541662,"%_md5|7_AccessionNumber","%_md5|4_#tag"
+"%_name|patientID_PatientName",4151880,"%_md5|7_AccessionNumber","%_md5|4_#tag"

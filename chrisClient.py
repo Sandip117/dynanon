@@ -2,6 +2,7 @@
 
 from base_client import BaseClient
 from chrisclient import client
+import json
 
 class ChrisClient(BaseClient):
     def __init__(self, url: str, username: str, password: str):
@@ -17,7 +18,12 @@ class ChrisClient(BaseClient):
 
     def anonymize(self, params: dict):
         # search for dicom dir
+        dicom_dir = self.__get_dir_path(json.loads(params["search"]))
+        print(dicom_dir)
         # run dircopy
+        pl_id = self.__get_plugin_id({"name":"pl-dircopy"})
+        print(pl_id)
+        self.__create_feed(pl_id,{'dir':dicom_dir,'title':'test'})
         # run dicom_headeredit
         pass
 
@@ -32,7 +38,7 @@ class ChrisClient(BaseClient):
         raise Exception(f"No plugin found with matching search criteria {params}")
 
     def __get_dir_path(self, params: dict):
-        params["limit"] = 100000
+        #params["limit"] = 100000
         files = self.cl.get_pacs_files(params)
         l_dir_path = set()
         for file in files['data']:

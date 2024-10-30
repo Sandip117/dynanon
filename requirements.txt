@@ -1,4 +1,5 @@
 python-chrisclient
+pandas
 
 # dev
 pytest==7.2.0
