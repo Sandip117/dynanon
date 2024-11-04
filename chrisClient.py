@@ -17,19 +17,30 @@ class ChrisClient(BaseClient):
         pass
 
     def anonymize(self, params: dict):
+        prefix = "dynanon"
+        feed_name = self.__create_feed_name(prefix,params["search"])
         # search for dicom dir
-        dicom_dir = self.__get_dir_path(json.loads(params["search"]))
-        print(dicom_dir)
+        dicom_dir = self.__get_dir_path(params["search"])
+        anon_params = json.dumps(params["anon"])
+
         # run dircopy
         pl_id = self.__get_plugin_id({"name":"pl-dircopy"})
-        print(pl_id)
-        self.__create_feed(pl_id,{'dir':dicom_dir,'title':'test'})
+        pv_in_id = self.__create_feed(pl_id,{'dir':dicom_dir,'title':feed_name})
         # run dicom_headeredit
+        pl_sub_id = self.__get_plugin_id({"name":"pl-simpledsapp", "version":"2.1.4"})
+        data = {"previous_id": pv_in_id, "tagStruct": anon_params}
+        self.__create_feed(pl_sub_id, data)
         pass
 
     def __create_feed(self, plugin_id: str,params: dict):
         response = self.cl.create_plugin_instance(plugin_id, params)
-        return response
+        return response['id']
+
+    def __create_feed_name(self, prefix: str, params: dict) -> str:
+        name = ""
+        for val in params.values():
+            name += f"-{val}"
+        return  f"{prefix}{name}"
 
     def __get_plugin_id(self, params: dict):
         response = self.cl.get_plugins(params)
@@ -38,7 +49,8 @@ class ChrisClient(BaseClient):
         raise Exception(f"No plugin found with matching search criteria {params}")
 
     def __get_dir_path(self, params: dict):
-        #params["limit"] = 100000
+        params["limit"] = 100000
+        params["pacs_identifier"] = "ORTHANC"
         files = self.cl.get_pacs_files(params)
         l_dir_path = set()
         for file in files['data']:

@@ -1,3 +1,3 @@
-PatientName,PatientID,AccessionNumber,RequestingPhysician
-"%_name|patientID_PatientName",4541662,"%_md5|7_AccessionNumber","%_md5|4_#tag"
-"%_name|patientID_PatientName",4151880,"%_md5|7_AccessionNumber","%_md5|4_#tag"
+PatientName,PatientID,AccessionNumber,RequestingPhysician,PatientID
+"%_name|patientID_PatientName",9f2b15a,"%_md5|7_AccessionNumber","%_md5|4_#tag","%_md5|7_PatientID"
+"%_name|patientID_PatientName",DAI000290,"%_md5|7_AccessionNumber","%_md5|4_#tag","%_md5|7_PatientID"
