@@ -10,7 +10,7 @@ def create_query(df: pd.DataFrame, str_srch_idx: str, str_anon_idx: str):
     l_anon_idx = list(map(int,str_anon_idx.split(',')))
 
     # create connection object
-    cube_con = ChrisClient("http://cube.chrisproject.org/api/v1/", "sandip", "sandip1234")
+    cube_con = ChrisClient("http://localhost:8000/api/v1/", "chris", "chris1234")
 
     for row in df.iterrows():
         d_job = {}

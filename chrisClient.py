@@ -24,11 +24,11 @@ class ChrisClient(BaseClient):
         anon_params = json.dumps(params["anon"])
 
         # run dircopy
-        pl_id = self.__get_plugin_id({"name":"pl-dircopy"})
-        pv_in_id = self.__create_feed(pl_id,{'dir':dicom_dir,'title':feed_name})
+        pl_id = self.__get_plugin_id({"name":"pl-dsdircopy","version":"1.0.2"})
+        pv_in_id = self.__create_feed(pl_id,{"previous_id":26,'dir':dicom_dir,'title':feed_name})
         # run dicom_headeredit
-        pl_sub_id = self.__get_plugin_id({"name":"pl-simpledsapp", "version":"2.1.4"})
-        data = {"previous_id": pv_in_id, "tagStruct": anon_params}
+        pl_sub_id = self.__get_plugin_id({"name":"pl-pfdicom_tagsub", "version":"3.3.4"})
+        data = {"previous_id": pv_in_id, "tagStruct": anon_params, 'fileFilter': '.dcm'}
         self.__create_feed(pl_sub_id, data)
         pass
 
@@ -49,9 +49,11 @@ class ChrisClient(BaseClient):
         raise Exception(f"No plugin found with matching search criteria {params}")
 
     def __get_dir_path(self, params: dict):
-        params["limit"] = 100000
-        params["pacs_identifier"] = "ORTHANC"
-        files = self.cl.get_pacs_files(params)
+        mylist = []
+        for key in params.keys():
+            mylist.append(params[key])
+
+        files = self.cl.get_pacs_files({"fname_icontains": mylist[0]})
         l_dir_path = set()
         for file in files['data']:
             file_path = file['fname']
@@ -59,4 +61,5 @@ class ChrisClient(BaseClient):
             dir_path = file_path.replace(file_name, '')
             l_dir_path.add(dir_path)
         return ','.join(l_dir_path)
+
 
